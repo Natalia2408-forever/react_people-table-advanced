@@ -1,5 +1,29 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-export const PeopleTable = () => {
+import React from 'react';
+import { Person } from '../../types';
+import { PersonRow } from '../PersonRow';
+import { useSearchParams } from 'react-router-dom';
+import { SearchLink } from '../SearchLink';
+
+type Props = {
+  peopleList: Person[];
+};
+
+export const PeopleTable: React.FC<Props> = ({ peopleList }) => {
+  const [searchParams] = useSearchParams();
+  const sort = searchParams.get('sort');
+  const order = searchParams.get('order');
+  const getSortParams = (field: string) => {
+    if (sort !== field) {
+      return { sort: field, order: null };
+    }
+
+    if (order !== 'desc') {
+      return { sort: field, order: 'desc' };
+    }
+
+    return { sort: null, order: null };
+  };
+
   return (
     <table
       data-cy="peopleTable"
@@ -7,7 +31,47 @@ export const PeopleTable = () => {
     >
       <thead>
         <tr>
-          <th>
+          {['Name', 'Sex', 'Born', 'Died'].map(field => (
+            <th key={field}>
+              <SearchLink params={getSortParams(field)}>
+                <span className="is-capitalized">{field}</span>
+                <span className="icon">
+                  <i
+                    className={`fas fa-sort${sort === field ? (order === 'desc' ? '-down' : '-up') : ''}`}
+                  />
+                </span>
+              </SearchLink>
+            </th>
+          ))}
+
+          <th>Mother</th>
+          <th>Father</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {peopleList.map(person => (
+          <PersonRow
+            person={person}
+            peopleList={peopleList}
+            key={person.name}
+          />
+        ))}
+      </tbody>
+    </table>
+  );
+};
+
+/* eslint-disable jsx-a11y/control-has-associated-label */
+/*export const PeopleTable = () => {
+  return (
+   - <table
+     - data-cy="peopleTable"
+      -className="table is-striped is-hoverable is-narrow is-fullwidth"
+    >
+      -<thead>
+       - <tr>
+        -  <th>
             <span className="is-flex is-flex-wrap-nowrap">
               Name
               <a href="#/people?sort=name">
@@ -642,4 +706,4 @@ export const PeopleTable = () => {
       </tbody>
     </table>
   );
-};
+};*/
