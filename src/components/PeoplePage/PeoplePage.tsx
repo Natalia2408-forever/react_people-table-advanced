@@ -61,6 +61,10 @@ export const PeoplePage: React.FC = () => {
     const valA = a[sortField] ?? '';
     const valB = b[sortField] ?? '';
 
+    if (valA === valB) {
+      return 0;
+    }
+
     const result = valA > valB ? 1 : -1;
 
     return order === 'desc' ? -result : result;

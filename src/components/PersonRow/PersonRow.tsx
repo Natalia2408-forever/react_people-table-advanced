@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import classNames from 'classnames';
 import { Person } from '../../types';
 import { PersonLink } from '../PersonLink';
+import { getPersonSlug } from '../../utils/getPersonSlug';
 
 type Props = {
   person: Person;
@@ -12,11 +13,7 @@ type Props = {
 export const PersonRow: React.FC<Props> = ({ person, peopleList }) => {
   const { personName } = useParams();
 
-  const currentSlug = `${person.name} ${person.born ?? ''}`
-    .trim()
-    .replace(/\s+/g, '-')
-    .toLowerCase();
-  const isActive = personName === currentSlug;
+  const isActive = personName === getPersonSlug(person.name, person.born);
 
   return (
     <tr

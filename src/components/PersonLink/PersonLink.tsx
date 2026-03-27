@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import classNames from 'classnames';
 import { Person } from '../../types';
+import { getPersonSlug } from '../../utils/getPersonSlug';
 
 type Props = {
   name: string;
@@ -17,11 +18,7 @@ export const PersonLink: React.FC<Props> = ({ name, peopleList }) => {
     return <>{name || '-'}</>;
   }
 
-  const slug = `${person.name} ${person.born ?? ''}`
-    .trim()
-    .replace(/\s+/g, '-')
-    .replace(/,/g, '-')
-    .toLowerCase();
+  const slug = getPersonSlug(person.name, person.born);
 
   return (
     <Link

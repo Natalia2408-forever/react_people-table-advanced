@@ -9,17 +9,6 @@ export const PeopleFilters: React.FC = () => {
   const centuries = searchParams.getAll('centuries');
   const sex = searchParams.get('sex');
 
-  /*function handleSexChange(filterValue: string) {
-    const params = new URLSearchParams(searchParams);
-
-    if (filterValue === 'all') {
-      params.delete('sex');
-    } else {
-      params.set('sex', filterValue);
-    }
-   return `?${params.toString()}`;
-  }*/
-
   function handleQueryChange(event: React.ChangeEvent<HTMLInputElement>) {
     const params = new URLSearchParams(searchParams);
     const value = event.target.value;
@@ -98,23 +87,24 @@ export const PeopleFilters: React.FC = () => {
       <div className="panel-block">
         <div className="level is-flex-grow-1 is-mobile" data-cy="CenturyFilter">
           <div className="level-left">
-            {['16', '17', '18', '19', '20'].map(century => (
-              <SearchLink
-                key={century}
-                data-cy="century"
-                className={classNames('button mr-1', {
-                  'is-info': centuries.includes(century),
-                })}
-                params={{
-                  centuries:
-                    toggleCentury(century).length > 0
-                      ? toggleCentury(century)
-                      : null,
-                }}
-              >
-                {century}
-              </SearchLink>
-            ))}
+            {['16', '17', '18', '19', '20'].map(century => {
+              const nextCenturies = toggleCentury(century);
+
+              return (
+                <SearchLink
+                  key={century}
+                  data-cy="century"
+                  className={classNames('button mr-1', {
+                    'is-info': centuries.includes(century),
+                  })}
+                  params={{
+                    centuries: nextCenturies.length > 0 ? nextCenturies : null,
+                  }}
+                >
+                  {century}
+                </SearchLink>
+              );
+            })}
           </div>
 
           <div className="level-right ml-4">

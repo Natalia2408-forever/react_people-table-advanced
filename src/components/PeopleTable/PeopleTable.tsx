@@ -3,6 +3,7 @@ import { Person } from '../../types';
 import { PersonRow } from '../PersonRow';
 import { useSearchParams } from 'react-router-dom';
 import { SearchLink } from '../SearchLink';
+import classNames from 'classnames';
 
 type Props = {
   peopleList: Person[];
@@ -31,18 +32,26 @@ export const PeopleTable: React.FC<Props> = ({ peopleList }) => {
     >
       <thead>
         <tr>
-          {['Name', 'Sex', 'Born', 'Died'].map(field => (
-            <th key={field}>
-              <SearchLink params={getSortParams(field)}>
-                <span className="is-capitalized">{field}</span>
-                <span className="icon">
-                  <i
-                    className={`fas fa-sort${sort === field ? (order === 'desc' ? '-down' : '-up') : ''}`}
-                  />
-                </span>
-              </SearchLink>
-            </th>
-          ))}
+          {['Name', 'Sex', 'Born', 'Died'].map(field => {
+            const sortParams = getSortParams(field);
+
+            return (
+              <th key={field}>
+                <SearchLink params={sortParams}>
+                  <span className="is-capitalized">{field}</span>
+                  <span className="icon">
+                    <i
+                      className={classNames('fas', {
+                        'fa-sort': sort !== field,
+                        'fa-sort-up': sort === field && order !== 'desc',
+                        'fa-sort-down': sort === field && order === 'desc',
+                      })}
+                    />
+                  </span>
+                </SearchLink>
+              </th>
+            );
+          })}
 
           <th>Mother</th>
           <th>Father</th>
